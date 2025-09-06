@@ -9,7 +9,8 @@ const formData = ref({
   confirmPassword: '', // added confirmPassword
   isAustralian: false,
   reason: '',
-  gender: '' // initial value empty, paired with placeholder option
+  gender: '', // initial value empty, paired with placeholder option
+  suburb: 'Clayton' // added suburb with one-way binding default
 })
 
 const submittedCards = ref([])
@@ -125,7 +126,8 @@ const clearForm = () => {
     confirmPassword: '', // reset confirmPassword
     isAustralian: false,
     reason: '',
-    gender: ''
+    gender: '',
+    suburb: 'Clayton' // keep default on reset to show one-way binding
   }
   errors.value = {
     username: null,
@@ -246,13 +248,24 @@ const clearForm = () => {
               :class="{ 'is-invalid': !!errors.reason }"
             ></textarea>
             <div v-if="errors.reason" class="text-danger mt-1">{{ errors.reason }}</div>
-            <!-- ✅ show positive feedback if contains 'friend' -->
+            <!-- show positive feedback if contains 'friend' -->
             <div
               v-if="formData.reason.toLowerCase().includes('friend')"
               class="text-success mt-1"
             >
               Great to have a friend
             </div>
+          </div>
+
+          <!-- Suburb (one-way binding using v-bind) -->
+          <div class="mb-3">
+            <label for="suburb" class="form-label">Suburb</label>
+            <input
+              type="text"
+              class="form-control"
+              id="suburb"
+              v-bind:value="formData.suburb"
+            />
           </div>
 
           <div class="text-center">
@@ -281,6 +294,7 @@ const clearForm = () => {
       </Column>
       <Column field="gender" header="Gender"></Column>
       <Column field="reason" header="Reason"></Column>
+      <Column field="suburb" header="Suburb"></Column>
     </DataTable>
   </div>
 
@@ -302,6 +316,7 @@ const clearForm = () => {
           </li>
           <li class="list-group-item">Gender: {{ card.gender }}</li>
           <li class="list-group-item">Reason: {{ card.reason }}</li>
+          <li class="list-group-item">Suburb: {{ card.suburb }}</li>
         </ul>
       </div>
     </div>
@@ -326,6 +341,7 @@ const clearForm = () => {
 #password:focus,
 #confirm-password:focus,
 #isAustralian:focus,
+#suburb:focus,
 .card {
   border: 1px solid #ccc;
   border-radius: 10px;
